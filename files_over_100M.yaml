@@ -1,9 +1,0 @@
----
-- name: Zips logs over 100M
-  hosts: all
-  become: true
-  become_method: sudo
-  user: centos
-  tasks:
-  - name: Run find command
-    shell: 'find   /var/log     -type f      -name "*.log"     -size   +100M    -exec   gzip -v9   {} +' 
