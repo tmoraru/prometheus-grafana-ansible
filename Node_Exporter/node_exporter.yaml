@@ -6,13 +6,12 @@
   user: centos
   tasks:
 
-  - name: Add user
-    shell: 
-      cmd: sudo useradd --no-create-home --shell /bin/false prometheus
+
 
   - name: Create folders and Set permissions
     shell: "{{item}}"
     with_items:
+    -  sudo useradd --no-create-home --shell /bin/false prometheus
     -  mkdir -p /etc/prometheus
     -  mkdir -p /var/lib/prometheus
     -  chown prometheus:prometheus /etc/prometheus
