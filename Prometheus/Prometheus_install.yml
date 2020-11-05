@@ -6,35 +6,20 @@
   user: centos
   ignore_errors: yes
   tasks:
-  - name: Update the system
-    shell: "sudo yum update -y "
-    
-  - name: Add user
-    shell: "sudo useradd --no-create-home --shell /bin/false prometheus"
-
-  - name: Create a folder
-    shell: "sudo mkdir /etc/prometheus"
-    
-  - name: Create folder
-    shell: "sudo mkdir /var/lib/prometheus"
-
-  - name: Change permission
-    shell: "sudo chown prometheus:prometheus /etc/prometheus"
-
-  - name: Change permission
-    shell: "sudo chown prometheus:prometheus /var/lib/prometheus"
-    
+  - name: Create new user, set specific permission 
+    shell: |
+      sudo yum update -y
+      sudo useradd --no-create-home --shell /bin/false prometheus
+      sudo mkdir /etc/prometheus
+      sudo mkdir /var/lib/prometheus
+      sudo chown prometheus:prometheus /etc/prometheus
+      sudo chown prometheus:prometheus /var/lib/prometheus
 
   - name: Install Prometheus
-    shell:  "sudo wget https://github.com/prometheus/prometheus/releases/download/v2.3.2/prometheus-2.3.2.linux-amd64.tar.gz"
-   
-
-  - name: Unzip Prometheus 
-    shell: "tar -xvf prometheus-2.3.2.linux-amd64.tar.gz"
-
-  - name: Move the unziped files
-    shell: "mv prometheus-2.3.2.linux-amd64 prometheus-files"
-
+    shell: |
+      sudo wget https://github.com/prometheus/prometheus/releases/download/v2.3.2/prometheus-2.3.2.linux-amd64.tar.gz
+      tar -xvf prometheus-2.3.2.linux-amd64.tar.gz
+      mv prometheus-2.3.2.linux-amd64 prometheus-files
 
 
   - name: Copy binaries 
@@ -71,6 +56,7 @@
     template:
       src: prometheus.service
       dest: /etc/systemd/system/prometheus.service
+
 
 
   - name:  Restarts
