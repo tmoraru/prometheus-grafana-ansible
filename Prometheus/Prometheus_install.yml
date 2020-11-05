@@ -21,7 +21,8 @@
     with_items:
     - sudo wget https://github.com/prometheus/prometheus/releases/download/v2.3.2/prometheus-2.3.2.linux-amd64.tar.gz
     - tar -xvf prometheus-2.3.2.linux-amd64.tar.gz
-    - mv prometheus-2.3.2.linux-amd64 prometheus-files
+    - mv prometheus-2.3.2.linux-amd64 /tmp
+    - mv prometheus-files /tmp
 
 
   - name: Copy binaries 
