@@ -2,7 +2,7 @@
 
 ## Documentations
 <br>
-<img width="337" alt="47" src="https://user-images.githubusercontent.com/13994900/98179028-78425080-1ec3-11eb-8ff4-badc06e11de0.PNG">
+<img width="600" alt="47" src="https://user-images.githubusercontent.com/13994900/98179028-78425080-1ec3-11eb-8ff4-badc06e11de0.PNG">
 <br>
 <br>
 
@@ -93,7 +93,78 @@ scrape_configs:
 4. Create a playbook called ``` Prometheus_install.yml ``` to install prometheus. 
 
 ```
-add the prometheus code
+---
+- name: Prometheus Installation
+  hosts: localhost
+  become: true
+  become_method: sudo
+  user: centos
+  ignore_errors: yes
+  tasks:
+  - name: Create new user, set specific permission 
+    shell: "{{item}}"
+    with_items:
+    - sudo yum update -y
+    - sudo useradd --no-create-home --shell /bin/false prometheus
+    - sudo mkdir /etc/prometheus
+    - sudo mkdir /var/lib/prometheus
+    - sudo chown prometheus:prometheus /etc/prometheus
+    - sudo chown prometheus:prometheus /var/lib/prometheus
+
+  - name: Install Prometheus
+    shell: "{{item}}"
+    with_items:
+    - sudo wget https://github.com/prometheus/prometheus/releases/download/v2.3.2/prometheus-2.3.2.linux-amd64.tar.gz
+    - tar -xvf prometheus-2.3.2.linux-amd64.tar.gz
+    - mv prometheus-2.3.2.linux-amd64 prometheus-files
+  
+
+
+  - name: Copy binaries 
+    command: "{{item}}"
+    with_items:
+    - sudo cp prometheus-files/prometheus /usr/local/bin/
+    - sudo cp prometheus-files/promtool /usr/local/bin/
+    - sudo chown prometheus:prometheus /usr/local/bin/prometheus
+    - sudo chown prometheus:prometheus /usr/local/bin/promtool
+    
+
+  
+  - name: Move console files
+    shell: "{{item}}"
+    with_items:
+    - sudo cp -r prometheus-files/consoles /etc/prometheus 
+    - sudo cp -r prometheus-files/console_libraries /etc/prometheus 
+    - sudo chown -R prometheus:prometheus /etc/prometheus/consoles 
+    - sudo chown -R prometheus:prometheus /etc/prometheus/console_libraries 
+
+
+  - name: Creates prometheus config file
+    template:
+      src: prometheus.yml
+      dest: /etc/prometheus/prometheus.yml
+
+
+
+  - name: Change permission
+    shell: "sudo chown prometheus:prometheus /etc/prometheus/prometheus.yml"
+
+
+  - name: Creates prometheus config file
+    template:
+      src: prometheus.service
+      dest: /etc/systemd/system/prometheus.service
+
+
+
+  - name:  Restarts
+    command: "{{item}}"
+    with_items:
+    - sudo iptables -F
+    - sudo systemctl daemon-reload 
+    - sudo systemctl start prometheus 
+    - sudo systemctl enable prometheus 
+    - sudo systemctl status prometheus 
 ```
 
 
