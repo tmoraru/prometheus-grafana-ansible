@@ -164,9 +164,13 @@ scrape_configs:
     - sudo systemctl daemon-reload 
     - sudo systemctl start prometheus 
     - sudo systemctl enable prometheus 
-    - sudo systemctl status prometheus 
+   
 ```
 <br>
+Once you followed the steps, run next command:
+```
+ansible-playbook -i inv Prometheus_install.yml -u ec2-user 
+```
 
 Prometheus tools is up and running 
 
