@@ -205,23 +205,24 @@ sslcacert=/etc/pki/tls/certs/ca-bundle.crt
   hosts: localhost
   become: true
   become_method: sudo
-  user: centos
+  user: ec2-user
   tasks:
-    - name: Create repo
-      template:
+  - name: Create repo
+    template:
       src: grafana.repo
       dest: /etc/yum.repos.d/grafana.repo
       
-    - name:
-      shell: "sudo yum install grafana fontconfig freetype* urw-fonts -y"
+  - name:
+    shell: "sudo yum install grafana fontconfig freetype* urw-fonts -y"
       
-    - name: Starts Grafana
-      command: "{{item}}"
-      with_items: 
-      - sudo systemctl daemon-reload 
-      - sudo systemctl start grafana-server 
-      - sudo systemctl enable grafana-server.service 
-      - sudo systemctl status grafana-server 
+  - name: Starts Grafana
+    command: "{{item}}"
+    with_items: 
+    - sudo systemctl daemon-reload 
+    - sudo systemctl start grafana-server 
+    - sudo systemctl enable grafana-server.service 
+    - sudo systemctl status grafana-server 
+
 ```
 Grafana tool is up and running 
 
