@@ -7,19 +7,21 @@
   ignore_errors: yes
   tasks:
   - name: Create new user, set specific permission 
-    shell: |
-      sudo yum update -y
-      sudo useradd --no-create-home --shell /bin/false prometheus
-      sudo mkdir /etc/prometheus
-      sudo mkdir /var/lib/prometheus
-      sudo chown prometheus:prometheus /etc/prometheus
-      sudo chown prometheus:prometheus /var/lib/prometheus
+    shell: "{{item}}"
+    with_items:
+    - sudo yum update -y
+    - sudo useradd --no-create-home --shell /bin/false prometheus
+    - sudo mkdir /etc/prometheus
+    - sudo mkdir /var/lib/prometheus
+    - sudo chown prometheus:prometheus /etc/prometheus
+    - sudo chown prometheus:prometheus /var/lib/prometheus
 
   - name: Install Prometheus
-    shell: |
-      sudo wget https://github.com/prometheus/prometheus/releases/download/v2.3.2/prometheus-2.3.2.linux-amd64.tar.gz
-      tar -xvf prometheus-2.3.2.linux-amd64.tar.gz
-      mv prometheus-2.3.2.linux-amd64 prometheus-files
+    shell: "{{item}}"
+    with_items:
+    - sudo wget https://github.com/prometheus/prometheus/releases/download/v2.3.2/prometheus-2.3.2.linux-amd64.tar.gz
+    - tar -xvf prometheus-2.3.2.linux-amd64.tar.gz
+    - mv prometheus-2.3.2.linux-amd64 prometheus-files
 
 
   - name: Copy binaries 
@@ -33,7 +35,7 @@
 
   
   - name: Move console files
-    command: "{{item}}"
+    shell: "{{item}}"
     with_items:
     - sudo cp -r prometheus-files/consoles /etc/prometheus 
     - sudo cp -r prometheus-files/console_libraries /etc/prometheus 
