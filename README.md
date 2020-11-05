@@ -29,7 +29,7 @@ Go to the '/etc/systemd/system/' directory and create new service file 'promethe
 <br>
 
 ```
-vi /etc/prometheus/prometheus.yml
+vi prometheus.service
 
 
 ```
