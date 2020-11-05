@@ -5,30 +5,27 @@
   become_method: sudo
   user: centos
   tasks:
-  
+
   - name: Add user
-    shell: "sudo useradd --no-create-home --shell /bin/false prometheus"
+    shell: 
+      cmd: sudo useradd --no-create-home --shell /bin/false prometheus
 
-  - name: Create a file
-    shell: "sudo mkdir -p /etc/prometheus"
-    
-  - name: Create file
-    shell: "sudo mkdir -p /var/lib/prometheus"
+  - name: Create folders and Set permissions
+    shell: "{{item}}"
+    with_items:
+    -  mkdir -p /etc/prometheus
+    -  mkdir -p /var/lib/prometheus
+    -  chown prometheus:prometheus /etc/prometheus
 
-  - name: Change permission
-    shell: "sudo chown prometheus:prometheus /etc/prometheus"
-
-  - name: Change permission
-    shell: "sudo chown prometheus:prometheus /var/lib/prometheus"
-
+   
   - name: Install Node Exporter
-    shell: "sudo wget https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_exporter-0.18.1.linux-amd64.tar.gz"
+    shell: "{{item}}"
+    with_items:
+    - sudo wget https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_exporter-0.18.1.linux-amd64.tar.gz
+    - sudo tar xvfz node_exporter-0.18.1.linux-amd64.tar.gz 
+    - sudo mv node_exporter-0.18.1.linux-amd64 /etc/prometheus/node_exporter
 
-  - name: Unzip Node Exporter file
-    shell: "sudo tar xvfz node_exporter-0.18.1.linux-amd64.tar.gz "
 
-  - name: Move the unziped files
-    shell: " sudo mv node_exporter-0.18.1.linux-amd64 /etc/prometheus/node_exporter "
 
   - name: Copy the Node Exporter systemd service file
     template:
