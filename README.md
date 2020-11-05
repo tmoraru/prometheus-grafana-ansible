@@ -29,8 +29,8 @@ Go to the '/etc/systemd/system/' directory and create new service file 'promethe
 <br>
 
 ```
-cd /etc/systemd/system/
-vim prometheus.service
+vi /etc/prometheus/prometheus.yml
+
 
 ```
 <br>
