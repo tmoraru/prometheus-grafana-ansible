@@ -168,11 +168,12 @@ scrape_configs:
 ```
 <br>
 Once you followed the steps, run next command:
+
 ```
 ansible-playbook -i inv Prometheus_install.yml -u ec2-user 
 ```
 
-Prometheus tools is up and running 
+Take the Ip add the port and Prometheus tools is up and running 
 
 <img width="952" alt="48" src="https://user-images.githubusercontent.com/13994900/98199481-d5a0c680-1ef0-11eb-9739-31d47c0e17b0.PNG">
 
