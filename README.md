@@ -315,3 +315,4 @@ sudo systemctl stop prometheus.service
 sudo systemctl start prometheus.service
 ```
 3. Collect CPU using the Node_Exporter
+
