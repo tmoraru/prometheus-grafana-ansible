@@ -1,4 +1,4 @@
-# Provision Prometheu & Grafana through Ansible
+# Provision Prometheus & Grafana through Ansible
 
 ## Documentations
 <br>
@@ -14,7 +14,7 @@ python --version   /* 2.7 */
 ```
 <br>
 
-## Steps from Scratche based on my Documentation
+## Steps from Scratch based on my Documentation
 
 
 * Create a repo called  ``` prometheus-grafana-ansible ```
