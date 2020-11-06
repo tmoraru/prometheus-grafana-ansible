@@ -22,7 +22,7 @@ python --version   /* 2.7 */
 ### Install and Set up Prometheus tool
 1. Create a saperate folder for Prometheus
 ```
-mkdir grafana-prometheus-ansible/Prometheus
+mkdir prometheus-grafana-ansible/Prometheus
 ```
 2. In this step, we will configure prometheus as a systemd service.
 <br>
