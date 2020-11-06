@@ -168,7 +168,7 @@ scrape_configs:
 Once you followed the steps, run next command:
 
 ```
-ansible-playbook -i inv Prometheus_install.yml -u ec2-user
+ansible-playbook Prometheus_install.yml 
 ```
 
 Take the Ip add the port and Prometheus tools is up and running.
@@ -316,7 +316,7 @@ sslcacert=/etc/pki/tls/certs/ca-bundle.crt
       - sudo systemctl enable grafana-server.service 
       - sudo systemctl status grafana-server 
 ```
-Grafana tool is up and running 
+* Run the playbook ``` ansible-playbook grafana.yaml ``` and Grafana tool should be up and running 
 
 <img width="960" alt="50" src="https://user-images.githubusercontent.com/13994900/98199555-03860b00-1ef1-11eb-8523-7ec35e26b9db.PNG">
 
