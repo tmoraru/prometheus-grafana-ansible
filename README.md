@@ -177,58 +177,6 @@ Take the Ip add the port and Prometheus tools is up and running.
 
 <br>
 
-
-## Install and Set up Grafana tool
-<br>
-
-1. Create a file called ```grafana.repo ``` with configuration for Grafana tool.
-
-```
-vi Grafana/grafana.repo 
-```
-Add the bellow configuration. 
-```
-[grafana] 
-name=grafana 
-baseurl=https://packages.grafana.com/oss/rpm 
-repo_gpgcheck=1 
-enabled=1 
-gpgcheck=1 
-gpgkey=https://packages.grafana.com/gpg.key 
-sslverify=1 
-sslcacert=/etc/pki/tls/certs/ca-bundle.crt 
-```
-2. Create a file called ``` grafana.yaml ``` to Install Grafana. 
-```
----
-- name: Node Exporter Installation
-  hosts: localhost
-  become: true
-  become_method: sudo
-  user: ec2-user
-  tasks:
-    - name: Create repo
-      template:
-      src: grafana.repo
-      dest: /etc/yum.repos.d/grafana.repo
-      
-    - name:
-      shell: "sudo yum install grafana fontconfig freetype* urw-fonts -y"
-      
-    - name: Starts Grafana
-      command: "{{item}}"
-      with_items: 
-      - sudo systemctl daemon-reload 
-      - sudo systemctl start grafana-server 
-      - sudo systemctl enable grafana-server.service 
-      - sudo systemctl status grafana-server 
-```
-Grafana tool is up and running 
-
-<img width="960" alt="50" src="https://user-images.githubusercontent.com/13994900/98199555-03860b00-1ef1-11eb-8523-7ec35e26b9db.PNG">
-
-<br>
-
 ### Install and Set up Node Exporter, to collect metrics from Prometheus than to visualize on Grafana Dashboard. 
 
 1. Create a folder called ``` mkdir Node_Exporter ``` 
@@ -292,15 +240,21 @@ WantedBy=default.target
     - sudo systemctl enable node_exporter
 ```
 
-I do have access to the metrics of this Machine.
+Once follew steps, execute the playbook:
+
+```
+ansible-playbook node_exporter.yaml
+```
+
 
 <img width="850" alt="51" src="https://user-images.githubusercontent.com/13994900/98201647-c1ab9380-1ef5-11eb-8da4-5566d58881a4.PNG">
 
-### How to see how much CPU is using my machine? 
+
+### How to connect node_exporter to Prometheus ? 
 
 1. Take Node_Exporter's Ip and add as the bellow example. Now, you will make a connection between Prometheus machine and Node_Exporter machine.
 ```
-vi Prometheus/ prometheus.yml 
+vi /etc/prometheus/prometheus.yml
 ```
 Add a new job 
 ```
@@ -314,5 +268,77 @@ Add a new job
 sudo systemctl stop prometheus.service
 sudo systemctl start prometheus.service
 ```
-3. Collect CPU using the Node_Exporter
 
+
+
+## Install and Set up Grafana tool
+<br>
+
+1. Create a file called ```grafana.repo ``` with configuration for Grafana tool.
+
+```
+vi Grafana/grafana.repo 
+```
+Add the bellow configuration. 
+```
+[grafana] 
+name=grafana 
+baseurl=https://packages.grafana.com/oss/rpm 
+repo_gpgcheck=1 
+enabled=1 
+gpgcheck=1 
+gpgkey=https://packages.grafana.com/gpg.key 
+sslverify=1 
+sslcacert=/etc/pki/tls/certs/ca-bundle.crt 
+```
+2. Create a file called ``` grafana.yaml ``` to Install Grafana. 
+```
+---
+- name: Node Exporter Installation
+  hosts: localhost
+  become: true
+  become_method: sudo
+  user: ec2-user
+  tasks:
+    - name: Create repo
+      template:
+      src: grafana.repo
+      dest: /etc/yum.repos.d/grafana.repo
+      
+    - name:
+      shell: "sudo yum install grafana fontconfig freetype* urw-fonts -y"
+      
+    - name: Starts Grafana
+      command: "{{item}}"
+      with_items: 
+      - sudo systemctl daemon-reload 
+      - sudo systemctl start grafana-server 
+      - sudo systemctl enable grafana-server.service 
+      - sudo systemctl status grafana-server 
+```
+Grafana tool is up and running 
+
+<img width="960" alt="50" src="https://user-images.githubusercontent.com/13994900/98199555-03860b00-1ef1-11eb-8523-7ec35e26b9db.PNG">
+
+<br>
+<br>
+
+### Collect metrics about resources which are consumed on your machine, by using the Node_Exporter and Prometheus, and visualize them through Grafana dashboard .
+
+1. Login to Grafana Dashboard
+
+<img width="905" alt="52" src="https://user-images.githubusercontent.com/13994900/98373764-594bd780-2005-11eb-9c5b-92b0239206b6.PNG">
+
+2. Add your tool from where you will perform the tasks
+
+<img width="770" alt="53" src="https://user-images.githubusercontent.com/13994900/98374041-bc3d6e80-2005-11eb-9942-d881806ccf91.PNG">
+
+
+<img width="577" alt="54" src="https://user-images.githubusercontent.com/13994900/98374091-ceb7a800-2005-11eb-8eee-0679447fd324.PNG">
+
+3. Create your New Dashboard, click on Add new Pannel, take the metrics of your node_exporter from Prometheus dashboard, and attache to Grafana as in the bellow picture:
+<img width="931" alt="56" src="https://user-images.githubusercontent.com/13994900/98374468-51406780-2006-11eb-98c1-50cb539a7d9c.PNG">
+
+4. After Save you will visualize how much resource consuming your machines.
+
+<img width="957" alt="55" src="https://user-images.githubusercontent.com/13994900/98374691-aaa89680-2006-11eb-8c79-07535318f556.PNG">
